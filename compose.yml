@@ -1,0 +1,38 @@
+services:
+
+  server:
+    build: .
+    container_name: mensagens-server
+    command: uv run python sistema-mensagens/server/server.py
+    ports:
+      - "5000:5000"
+
+  alice:
+    build: .
+    container_name: mensagens-alice
+    command: uv run python sistema-mensagens/client/client.py
+    environment:
+      CLIENT_NAME: alice
+      SERVER_URL: http://server:5000
+    depends_on:
+      - server
+
+  bob:
+    build: .
+    container_name: mensagens-bob
+    command: uv run python sistema-mensagens/client/client.py
+    environment:
+      CLIENT_NAME: bob
+      SERVER_URL: http://server:5000
+    depends_on:
+      - server
+
+  carol:
+    build: .
+    container_name: mensagens-carol
+    command: uv run python sistema-mensagens/client/client.py
+    environment:
+      CLIENT_NAME: carol
+      SERVER_URL: http://server:5000
+    depends_on:
+      - server
